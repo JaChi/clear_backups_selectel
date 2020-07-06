@@ -35,7 +35,7 @@ def ftpClear(ftp, path, days):
     for i in ftp.nlst():
         t = ftp.sendcmd('MDTM ' + i)
         ftime = time.mktime(datetime.datetime.strptime(t[4:], "%Y%m%d%H%M%S").timetuple())-time.timezone
-        if (dtime-ftime) > days*60*60:
+        if (dtime-ftime) > days*60*60*24:
             fname = path + '/' + i
             wrLog('INFO :: Delete file ' + fname)
             ftp.delete(i)
