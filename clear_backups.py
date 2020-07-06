@@ -15,6 +15,8 @@ def helper():
 ')
 
 def wrLog(msg):
+    if not os.path.exists('log'): 
+        os.makedirs('log')
     log_file='log/out.log'
     logfile = open(log_file, "a")
     t = time.strftime("%Y-%m-%d %H:%M:%S ")
@@ -64,7 +66,12 @@ def main(argv):
         elif opt in ("-p", "--path"):
             path = arg
         elif opt in ("-d", "--days"):
-            days = arg
+            try:
+                days = int(arg)
+            except:
+                wrLog('ERROR :: Invalid days value - ' + arg)
+                helper()
+                sys.exit()
     if user and psw and days:
         try:
             wrLog('INFO :: Connecting to FTP server...')
@@ -72,7 +79,7 @@ def main(argv):
         except ftplib.all_errors as e:
             wrLog('ERROR :: ' + str(e))
             sys.exit(2) 
-        ftpClear(ftp,path,int(days))       
+        ftpClear(ftp,path,days)       
     else:
         helper()
         sys.exit()
